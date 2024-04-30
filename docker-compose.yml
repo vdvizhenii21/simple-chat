@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+
+  app:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      PYTHONUNBUFFERED: 1
+    depends_on:
+    - db
+    env_file:
+      - .env
+    command: bash -c ". /app/scripts/runserver.sh"
+
+  db:
+    restart: on-failure
+    image: postgres:16
+    command: postgres -c 'max_connections=100'
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+
+  pgdata:
+    driver: local
+
+  static:
+    driver: local
+
+  media:
+    driver: local
+
