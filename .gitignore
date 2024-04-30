@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 docker-compose.override.yml
+settings_local.py
